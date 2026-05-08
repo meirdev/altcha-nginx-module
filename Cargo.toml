@@ -1,0 +1,37 @@
+[package]
+name = "ngx-http-altcha-module"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85.0"
+license = "MIT"
+description = "NGINX dynamic module exposing ALTCHA proof-of-work challenges via nginx variables."
+repository = "https://github.com/meirdev/altcha-nginx-module"
+
+[lib]
+crate-type = ["cdylib"]
+# Unit tests would need to link against the running nginx binary's symbols
+# (ngx_palloc, ngx_http_add_variable, ...). Disable cargo's auto test binary.
+test = false
+doctest = false
+
+[dependencies]
+ngx = { version = "0.5", default-features = false, features = ["std"] }
+nginx-sys = "0.5"
+altcha = "0.1"
+serde_json = "1"
+base64 = "0.22"
+libc = "0.2"
+duration-str = { version = "0.21", default-features = false }
+
+[features]
+default = ["export-modules", "ngx/vendored"]
+# Generate the `ngx_modules` table with module exports. Required for cdylib
+# builds outside the NGINX buildsystem.
+export-modules = []
+
+[dev-dependencies]
+ureq = { version = "3", default-features = false, features = ["rustls"] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
