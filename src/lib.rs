@@ -2,14 +2,13 @@
 //! variables.
 //!
 //! Two variables are exposed:
-//!   - `$altcha_challenge` — fresh challenge JSON (one per request, cached in
+//!   - `$altcha_challenge`: fresh challenge JSON (one per request, cached in
 //!     module ctx)
-//!   - `$altcha_verified`  — `"1"` if the configured input variable holds a
+//!   - `$altcha_verified`: `"1"` if the configured input variable holds a
 //!     valid solved payload, `"0"` otherwise
 //!
 //! Configuration directives are accepted in `http`, `server`, and `location`
-//! contexts and merge top-down (parent values fill in unset child values). See
-//! the README for the full list of directives.
+//! contexts and merge top-down (parent values fill in unset child values).
 
 use core::ffi::{c_char, c_void};
 use core::time::Duration;
@@ -472,10 +471,6 @@ unsafe fn bind_static_bool(v: *mut ngx_variable_value_t, value: bool) {
         (*v).data = bytes.as_ptr() as *mut u8;
     }
 }
-
-// ---------------------------------------------------------------------------
-// Directive setters
-// ---------------------------------------------------------------------------
 
 unsafe fn arg_str<'a>(cf: *mut ngx_conf_t) -> Option<&'a ngx_str_t> {
     let args = unsafe { (*(*cf).args).as_slice() };
